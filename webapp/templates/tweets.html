@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <script>
+            function retrieveResults() {
+                resultsFrame = document.getElementById("resultsFrame");
+                if (!resultsFrame) {
+                    var section = document.getElementById("results");
+                    var resultsFrame = document.createElement("iframe");
+                    resultsFrame.setAttribute("width", "100%");
+                    resultsFrame.setAttribute("frameborder", "0");
+                    resultsFrame.setAttribute("id", "resultsFrame");
+                    resultsFrame.setAttribute("onload", "fullsizeFrame(this)");
+                    section.appendChild(resultsFrame);
+                }
+                var searchTerm = document.getElementById('phrase').value;
+                var resultsURL = "{{ url_for('results') }}?term=" + encodeURIComponent(searchTerm);
+                resultsFrame.setAttribute("src", resultsURL)
+
+            }
+        
+        //https://stackoverflow.com/questions/9975810
+        function fullsizeFrame(frame) {
+            frame.style.height = frame.contentWindow.document.body.scrollHeight + 'px';
+        }
+        </script>
+
+        <title>State-Backed Twitter Information Operations | MPCS 53014</title>
+    </head>
+    <body>
+        <div class="container" id="top">
+            <div class="jumbotron">
+                <h2 class="display-4">State-Backed Twitter Information Operations</h2>
+                <p class="lead">Compare the usage of two to five word phrases or hashtags over time</p>
+                <form>
+                    <div class="form-row">
+                        <label for="phraseGroup">Search for a phrase/hashtag:</label>
+                        <div class="input-group" id="phraseGroup">
+                            <input type="text" class="form-control col-md-5" id="phrase" aria-describedby="phrase" onkeypress="if (event.keyCode == 13) {retrieveResults(); return false;}">
+                            &nbsp;
+                            <span class="input-group-btn">
+                                <button onclick="retrieveResults()" class="btn btn-primary" type="button">Fetch data</button>
+                            </span>
+
+                        </div>
+                        <small id="phraseHelp" class="form-text text-muted">Phrases can contain up to 5 space-separated words and hashtags should begin with a #.</small>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container" id="results">
+        </div>
+
+
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>
