@@ -80,12 +80,14 @@ uberjar for this program is included on the compute node of the class cluster at
 (and is chmoded appropriately to allow access from a Hive script). The following
 commands were used to run this program on a compute node of the class cluster:
 
-    \# Generate necessary HDFS directories
+    ```
+    # Generate necessary HDFS directories
     hdfs dfs -mkdir /benfogarty/finalProject
     hdfs dfs -mkdir /benfogarty/finalProject/users
 
-    \# Ingest user data with Thrift Serialization
+    # Ingest user data with Thrift Serialization
     yarn jar /home/benfogarty/finalProject/uber-serialize_users-0.0.1-SNAPSHOT.jar com.benfogarty.mpcs53014.HadoopUsersSerialization /home/benfogarty/finalProject/data/ira_users_csv_hashed.csv
+    ```
 
 Note that the original CSV file of account information was stored at /home/
 benfogarty/finalProject/ira_users_csv_hashed.csv on the class cluster.
@@ -96,13 +98,15 @@ The script used to process these two operations is available in the submission
 directory at the file path batch-layer/ingest_to_hive.hql. The following
 commands were used to run this script on a compute node of the class cluster:
 
-    \# Generate necessary HDFS directory and move tweets CSV to HDFS
+    ```
+    # Generate necessary HDFS directory and move tweets CSV to HDFS
     hdfs dfs -mkdir /benfogarty/finalProject/users
     hdfs dfs -put /home/benfogarty/finalProject/data/ira_tweets_csv_hashed.csv /benfogarty/finalProject/tweets/
 
-    \# Run the Hive ingestion script
+    # Run the Hive ingestion script
     hive -f /home/benfogarty/finalProject/ingest_to_hive.hql
-
+    ```
+    
 - A Scala script was used to process the Hive tables and generate batch views
 from the datasets. In particular, this script (1) processes tweet text,
 including  tokenization, removing stop words, URLs, hashtags, and account
@@ -116,11 +120,13 @@ available in the submission directory at the filepath batch-layer/
 process_data.scala. The command used to run this script on a compute node of the
 class cluster was:
 
-    \# Add the Users serialization to HDFS
+    ```
+    # Add the Users serialization to HDFS
     hdfs dfs -put /home/benfogarty/finalProject/public/serialize_users-0.0.1-SNAPSHOT.jar /benfogarty/finalProject
 
-    \# Run the Scala script
+    # Run the Scala script
     spark-shell --conf spark.hadoop.metastore.catalog.default=hive --driver-class-path /home/benfogarty/finalProject/public/serialize_users-0.0.1-SNAPSHOT.jar -i /home/benfogarty/finalProject/process_data.scala
+    ```
 
 #### Serving Layer
 
@@ -130,11 +136,13 @@ in the submission directory at the file path load_to_hbase.hql. Before running
 this script, I ran the following commands in the hbase shell on a compute node
 of the class cluster to generate the necessary HBase tables:
 
-    \# Create necessary HBase tables
+    ```
+    # Create necessary HBase tables
     create 'benfogarty_ngrams_by_month','ngrams'
     create 'benfogarty_ngrams_top_users','ngrams'
     create 'benfogarty_hashtags_by_month','hashtags'
     create 'benfogarty_hashtags_top_users','hashtags'
+    ```
 
 Then, I ran the aforementioned Hive script using the following command on a
 compute node of the class cluster:
@@ -147,8 +155,10 @@ compute node of the class cluster:
 (using the same format as Twitter provides tweets) and updates the
 month-by-month statistics on hashtag and ngram usage. To enable this layer, I
 first created a Kafka topic using the follwing command:
-
+    
+    ````
     /usr/hdp/current/kafka-broker/bin/kafka-topics.sh --create --zookeeper  mpcs53014c10-m-6-20191016152730.us-central1-a.c.mpcs53014-2019.internal:2181 --replication-factor 1 --partitions 1 --topic benfogarty_tweets
+    ````
 
 - The speed layer program is a Scala class, and the code for it is provided in
 the submisstion directory under the subdirectory speed_layer_tweets/. An uberjar
@@ -157,14 +167,18 @@ user-speed_layer_tweets-0.0.1-SNAPSHOT.jar. Before running this program for the
 first time, I ran the following commands in the hbase shell on a compute node of
 the class cluster to generate HBase tables for storing my realtime view:
 
-    \# Genrerate necessary HBase tables
+    ```
+    # Genrerate necessary HBase tables
     create 'benfogarty_ngrams_speed', 'ngrams'
     create 'benfogarty_hashtags_speed', 'hashtags'
+    ```
 
 - To run the speed layer and have it listen for Kafka messages, I ran the
 following command from a compute node of the class cluster:
 
+    ```
     spark-submit --class StreamTweets /home/benfogarty/finalProject/uber-speed_layer_tweets-0.0.1-SNAPSHOT.jar mpcs53014c10-m-6-20191016152730.us-central1-a.c.mpcs53014-2019.internal:6667
+    ```
 
 - The speed layer is designed to handle malformed input that lacks the proper
 column headers gracefully, catching the error in the uploaded data rather than
@@ -189,8 +203,12 @@ finalProject/. The web app includes three pages:
 To activate this miniconda environment, I ran the following command on the
 webserver node of the class cluster:
 
+    ```
     source /home/benfogarty/miniconda3/bin/activate
+    ```
 
 - Then to run the web app, I run the following command:
 
+    ```
     python3 /home/benfogarty/finalProject/app.py
+    ```
