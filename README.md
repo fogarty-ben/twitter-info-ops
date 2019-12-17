@@ -1,8 +1,9 @@
----
-title: 'MPCS 53014 Final Project README'
-author: 'Ben Fogarty'
-date: '12 December 2019'
---
+# MPCS 53014 Final Project
+
+Ben Fogarty
+University of Chicago
+
+12 December 2019
 
 ## Project scope
 
@@ -36,7 +37,8 @@ directory.
 
 A screenshot of the app running are available in the submission directory in the
 screenshots/ subdirectory. A video of the app running is available on Google
-Drive via the link: https://drive.google.com/file/d/1ftFZL5WF1ikxxQLaZ3u9iMPuZLa4nmXk/view?usp=sharing. The video was too large to upload via GradeScope.
+Drive via the link: https://drive.google.com/file/d/1ftFZL5WF1ikxxQLaZ3u9iMPuZLa4nmXk/view?usp=sharing.
+The video was too large to upload via GradeScope.
 
 ## Running the app
 
